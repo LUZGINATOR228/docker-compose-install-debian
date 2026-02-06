@@ -13,9 +13,10 @@ apt update
 apt-cache policy docker-ce
 устанавливаем Docker...
 apt install docker-ce
-systemctl status docker #вот эта залупа под вопросом
+docker_status=$(systemctl status docker) #вот эта залупа под вопросом
+echo "$docker_status"
 echo меняем конфигурацию Docker для сетевых интерфейсов...
-sed -i 's/ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock/ExecStart=/usr/bin/dockerd --mtu 1450 -H fd:// --containerd=/run/containerd/containerd.sock/g' /lib/systemd/system/docker.service
+sed -i 's|ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd\.sock|ExecStart=/usr/bin/dockerd --mtu 1450 -H fd:// --containerd=/run/containerd/containerd.sock|' /lib/systemd/system/docker.service
 echo перезапускаем демона systemctl...
 systemctl daemon-reload
 Docker успешно установлен :)
